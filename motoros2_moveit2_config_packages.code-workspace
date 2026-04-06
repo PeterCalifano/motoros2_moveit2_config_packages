@@ -5,6 +5,21 @@
 		},
 		{
 			"path": "../../robots-api"
+		},
+		{
+			"path": "../moveit2_crash_course_starting_code"
+		},
+		{
+			"path": "../motoman_moveit_config"
+		},
+		{
+			"path": "../ros2_ws_motoman"
+		},
+		{
+			"path": "../ws_motoros2"
+		},
+		{
+			"path": "../ws_moveit"
 		}
 	],
 	"settings": {
