@@ -11,9 +11,9 @@
 
   <!-- Rail size and robot 1 position variables -->
   <xacro:property name="rail_length" value="4.0"/>
-  <xacro:property name="rail_width" value="0.2"/>
-  <xacro:property name="rail_height" value="0.05"/>
-  <xacro:property name="world_to_rail_offset" value="${rail_length+1.5}"/>
+  <xacro:property name="rail_width" value="0.5"/>
+  <xacro:property name="rail_height" value="0.25"/>
+  <xacro:property name="world_to_rail_offset" value="${rail_length+0.5}"/>
 
   <!-- Rail for Robot 1 -->
   <link name="rail">
@@ -21,16 +21,16 @@
       <geometry>
         <box size="${rail_length} ${rail_width} ${rail_height}"/>
       </geometry>
-      <origin xyz="${rail_length/2} 0 -${rail_height/2}" rpy="0 0 0"/>
+      <origin xyz="0.0 0.0 ${rail_height/2}" rpy="0 0 0"/>
       <material name="rail_grey">
-        <color rgba="0.5 0.5 0.5 1.0"/>
+        <color rgba="0.5 0.5 0.5 0.5"/>
       </material>
     </visual>
     <collision>
       <geometry>
         <box size="${rail_length} ${rail_width} ${rail_height}"/>
       </geometry>
-      <origin xyz="${rail_length/2} 0 -${rail_height/2}" rpy="0 0 0"/>
+      <origin xyz="0.0 0.0 ${rail_height/2}" rpy="0 0 0"/>
     </collision>
   </link>
 
@@ -43,6 +43,7 @@
   <joint name="rail_joint" type="prismatic">
     <parent link="rail"/>
     <child link="group_1/base_link"/>
+    <origin xyz="0 0 ${rail_height}" rpy="0 0 0"/>
     <axis xyz="1 0 0"/>
     <limit lower="${-rail_length/2}" upper="${rail_length/2}" effort="1000.0" velocity="1.0"/>
   </joint>
