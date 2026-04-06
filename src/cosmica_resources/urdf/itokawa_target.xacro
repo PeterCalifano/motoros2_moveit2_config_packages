@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!-- gripper_macro.xacro -->
+<xacro:macro name="gripper" params="prefix parent">
+<link name="${prefix}gripper">
+    <visual>...</visual>
+    <collision>...</collision>
+</link>
+<joint name="${prefix}tool0-gripper" type="fixed">
+    <parent link="${parent}"/>
+    <child link="${prefix}gripper"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+</joint>
+</xacro:macro>

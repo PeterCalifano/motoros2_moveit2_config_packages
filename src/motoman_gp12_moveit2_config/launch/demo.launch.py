@@ -35,25 +35,22 @@ def generate_launch_description():
       }
 
       moveit_config = (
-            MoveItConfigsBuilder("motoman_gp12", 
-			      package_name="motoman_gp12_moveit2_config",)
-        	  .robot_description(file_path=robot_description_file_path)
-        	  .robot_description_semantic(file_path=robot_description_semantic_file_path)
-    		    .trajectory_execution(file_path=trajectory_execution_file_path)
-    		    .to_moveit_configs()
-	  )
-    
+            MoveItConfigsBuilder("motoman_gp12",
+                  package_name="motoman_gp12_moveit2_config",)
+              .robot_description(file_path=robot_description_file_path)
+              .robot_description_semantic(file_path=robot_description_semantic_file_path)
+              .trajectory_execution(file_path=trajectory_execution_file_path)
+              .to_moveit_configs()
+      )
 
-	  # Start the actual move_group node/action server
+      # Start the actual move_group node/action server
       move_group_node = Node(
-        
             package="moveit_ros_move_group",
             executable="move_group",
             output="screen",
             parameters=[moveit_config.to_dict(), warehouse_ros_config],
             arguments=["--ros-args", "--log-level", "info"],
-	  )
-
+      )
 
       rviz_node = Node(
         package="rviz2",
@@ -79,12 +76,22 @@ def generate_launch_description():
             parameters=[{'robot_description':robot_description_contents}]
             )
 
+      # Publishes joint states so move_group can read the current robot state.
+      # Without a real robot, this provides default (zero) joint positions.
+      # When MotoROS2 is connected, its joint_state topic takes precedence.
+      joint_state_publisher_node = Node(
+            package="joint_state_publisher",
+            executable="joint_state_publisher",
+            name="joint_state_publisher",
+            output="screen",
+      )
 
       return LaunchDescription(
         [
           db_arg,
-          move_group_node, 
-          rviz_node, 
+          move_group_node,
+          rviz_node,
           robot_state_publisher_node,
+          joint_state_publisher_node,
         ]
       )
