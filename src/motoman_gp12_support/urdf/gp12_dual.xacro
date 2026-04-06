@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<robot name="dual_gp12" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find motoman_gp12_support)/urdf/gp12_macro.xacro" />
+
+  <!-- Instantiate both robots -->
+  <xacro:motoman_gp12 prefix="group_1/"/>
+  <xacro:motoman_gp12 prefix="group_2/"/>
+
+  <!-- World frame anchoring both robots -->
+  <link name="world"/>
+
+  <joint name="world_to_robot1" type="fixed">
+    <parent link="world"/>
+    <child link="group_1/base_link"/>
+    <origin xyz="4.0 0 0" rpy="0 0 3.14159"/>
+  </joint>
+
+  <!-- Robot 2 at world origin -->
+  <joint name="world_to_robot2" type="fixed">
+    <parent link="world"/>
+    <child link="group_2/base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>

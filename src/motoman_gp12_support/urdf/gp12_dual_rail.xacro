@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<robot name="dual_gp12_rail" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find motoman_gp12_support)/urdf/gp12_macro.xacro" />
+
+  <!-- Instantiate both robots -->
+  <xacro:motoman_gp12 prefix="group_1/"/>
+  <xacro:motoman_gp12 prefix="group_2/"/>
+
+  <!-- World frame -->
+  <link name="world"/>
+
+  <!-- Rail for Robot 1 -->
+  <link name="rail">
+    <visual>
+      <geometry>
+        <box size="3.0 0.2 0.05"/>
+      </geometry>
+      <origin xyz="1.5 0 -0.025" rpy="0 0 0"/>
+      <material name="rail_grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="3.0 0.2 0.05"/>
+      </geometry>
+      <origin xyz="1.5 0 -0.025" rpy="0 0 0"/>
+    </collision>
+    </collision>
+  </link>
+
+  <joint name="world_to_rail" type="fixed">
+    <parent link="world"/>
+    <child link="rail"/>
+    <origin xyz="4.0 0 0" rpy="0 0 3.14159"/>
+  </joint>
+
+  <joint name="rail_joint" type="prismatic">
+    <parent link="rail"/>
+    <child link="group_1/base_link"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="0.0" upper="3.0" effort="1000.0" velocity="1.0"/>
+  </joint>
+
+  <!-- Robot 2 at world origin -->
+  <joint name="world_to_robot2" type="fixed">
+    <parent link="world"/>
+    <child link="group_2/base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>
