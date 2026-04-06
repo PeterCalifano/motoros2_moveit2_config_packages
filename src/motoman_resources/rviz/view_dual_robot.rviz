@@ -160,8 +160,8 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    # Fixed frame matches the MotoROS2 group_1/ prefix convention
-    Fixed Frame: group_1/base_link
+    # Fixed frame for dual-robot setup with shared world frame
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
