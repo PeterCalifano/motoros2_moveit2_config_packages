@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="motoman_gp12_dual">
+    <group name="group_1_manipulator">
+        <joint name="group_1/joint_1"/>
+        <joint name="group_1/joint_2"/>
+        <joint name="group_1/joint_3"/>
+        <joint name="group_1/joint_4"/>
+        <joint name="group_1/joint_5"/>
+        <joint name="group_1/joint_6"/>
+    </group>
+
+    <group name="group_2_manipulator">
+        <joint name="group_2/joint_1"/>
+        <joint name="group_2/joint_2"/>
+        <joint name="group_2/joint_3"/>
+        <joint name="group_2/joint_4"/>
+        <joint name="group_2/joint_5"/>
+        <joint name="group_2/joint_6"/>
+    </group>
+
+    <group name="dual_manipulators">
+        <group name="group_1_manipulator"/>
+        <group name="group_2_manipulator"/>
+    </group>
+
+    <group_state name="home" group="group_1_manipulator">
+        <joint name="group_1/joint_1" value="0"/>
+        <joint name="group_1/joint_2" value="0"/>
+        <joint name="group_1/joint_3" value="0"/>
+        <joint name="group_1/joint_4" value="0"/>
+        <joint name="group_1/joint_5" value="0"/>
+        <joint name="group_1/joint_6" value="0"/>
+    </group_state>
+
+    <group_state name="home" group="group_2_manipulator">
+        <joint name="group_2/joint_1" value="0"/>
+        <joint name="group_2/joint_2" value="0"/>
+        <joint name="group_2/joint_3" value="0"/>
+        <joint name="group_2/joint_4" value="0"/>
+        <joint name="group_2/joint_5" value="0"/>
+        <joint name="group_2/joint_6" value="0"/>
+    </group_state>
+
+    <group_state name="home" group="dual_manipulators">
+        <joint name="group_1/joint_1" value="0"/>
+        <joint name="group_1/joint_2" value="0"/>
+        <joint name="group_1/joint_3" value="0"/>
+        <joint name="group_1/joint_4" value="0"/>
+        <joint name="group_1/joint_5" value="0"/>
+        <joint name="group_1/joint_6" value="0"/>
+        <joint name="group_2/joint_1" value="0"/>
+        <joint name="group_2/joint_2" value="0"/>
+        <joint name="group_2/joint_3" value="0"/>
+        <joint name="group_2/joint_4" value="0"/>
+        <joint name="group_2/joint_5" value="0"/>
+        <joint name="group_2/joint_6" value="0"/>
+    </group_state>
+
+    <disable_collisions link1="group_1/base_link" link2="group_1/link_1" reason="Adjacent"/>
+    <disable_collisions link1="group_1/link_1" link2="group_1/link_2" reason="Adjacent"/>
+    <disable_collisions link1="group_1/link_1" link2="group_1/link_3" reason="Never"/>
+    <disable_collisions link1="group_1/link_2" link2="group_1/link_3" reason="Adjacent"/>
+    <disable_collisions link1="group_1/link_2" link2="group_1/link_4" reason="Never"/>
+    <disable_collisions link1="group_1/link_2" link2="group_1/link_5" reason="Never"/>
+    <disable_collisions link1="group_1/link_2" link2="group_1/link_6" reason="Never"/>
+    <disable_collisions link1="group_1/link_3" link2="group_1/link_4" reason="Adjacent"/>
+    <disable_collisions link1="group_1/link_3" link2="group_1/link_5" reason="Never"/>
+    <disable_collisions link1="group_1/link_3" link2="group_1/link_6" reason="Never"/>
+    <disable_collisions link1="group_1/link_4" link2="group_1/link_5" reason="Adjacent"/>
+    <disable_collisions link1="group_1/link_5" link2="group_1/link_6" reason="Adjacent"/>
+
+    <disable_collisions link1="group_2/base_link" link2="group_2/link_1" reason="Adjacent"/>
+    <disable_collisions link1="group_2/link_1" link2="group_2/link_2" reason="Adjacent"/>
+    <disable_collisions link1="group_2/link_1" link2="group_2/link_3" reason="Never"/>
+    <disable_collisions link1="group_2/link_2" link2="group_2/link_3" reason="Adjacent"/>
+    <disable_collisions link1="group_2/link_2" link2="group_2/link_4" reason="Never"/>
+    <disable_collisions link1="group_2/link_2" link2="group_2/link_5" reason="Never"/>
+    <disable_collisions link1="group_2/link_2" link2="group_2/link_6" reason="Never"/>
+    <disable_collisions link1="group_2/link_3" link2="group_2/link_4" reason="Adjacent"/>
+    <disable_collisions link1="group_2/link_3" link2="group_2/link_5" reason="Never"/>
+    <disable_collisions link1="group_2/link_3" link2="group_2/link_6" reason="Never"/>
+    <disable_collisions link1="group_2/link_4" link2="group_2/link_5" reason="Adjacent"/>
+    <disable_collisions link1="group_2/link_5" link2="group_2/link_6" reason="Adjacent"/>
+</robot>
