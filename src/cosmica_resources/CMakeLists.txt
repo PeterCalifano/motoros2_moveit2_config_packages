@@ -7,3 +7,6 @@ ament_package()
 
 install(DIRECTORY meshes urdf
   DESTINATION share/${PROJECT_NAME})
+
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME})
