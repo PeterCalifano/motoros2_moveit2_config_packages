@@ -12,9 +12,9 @@ Today, this setup is a scene-visualization flow, not a full dual-robot MoveIt 2 
 
 ## Files That Define The Scene
 
-- [`src/motoman_gp12_support/urdf/gp12_dual_rail_tool.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_support/urdf/gp12_dual_rail_tool.xacro): dual GP12 scene with rail and target.
-- [`src/motoman_gp12_support/urdf/gp12_dual_rail.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_support/urdf/gp12_dual_rail.xacro): dual GP12 scene with rail only.
-- [`src/cosmica_resources/launch/view_gp12_dual_rail_target.launch.xml`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/cosmica_resources/launch/view_gp12_dual_rail_target.launch.xml): RViz launch for the dual scene with target.
+- [`src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro): top-level dual GP12 cell with `rail|fixed` topology selection and optional target attachment.
+- [`src/motoman_gp12_dual_cell_support/urdf/gp12_dual_rail_tool.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/urdf/gp12_dual_rail_tool.xacro): compatibility wrapper for rail mode with target attached.
+- [`src/motoman_gp12_dual_cell_support/launch/view_gp12_dual_cell.launch.xml`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/launch/view_gp12_dual_cell.launch.xml): RViz launch for the dual scene with configurable topology and target attachment.
 - [`src/motoman_gp12_support/urdf/gp12_macro.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_support/urdf/gp12_macro.xacro): shared GP12 link, joint, and `tool0` definition.
 
 ## Current Frame Layout
@@ -50,7 +50,7 @@ After building and sourcing the workspace:
 ```bash
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
-ros2 launch cosmica_resources view_gp12_dual_rail_target.launch.xml
+ros2 launch motoman_gp12_dual_cell_support view_gp12_dual_cell.launch.xml cell_mode:=rail attach_target:=true
 ```
 
 This launch starts:
@@ -81,7 +81,7 @@ When you change the dual-scene xacro, it is helpful to validate expansion before
 ```bash
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
-xacro src/motoman_gp12_support/urdf/gp12_dual_rail_tool.xacro > /tmp/gp12_dual_rail_tool.urdf
+xacro src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro cell_mode:=rail attach_target:=true > /tmp/gp12_dual_rail_tool.urdf
 ```
 
 The current dual xacros expand successfully in this workspace.
@@ -91,16 +91,18 @@ The current dual xacros expand successfully in this workspace.
 Use these locations depending on what you want to change:
 
 - rail dimensions and world placement:
-  [`src/motoman_gp12_support/urdf/gp12_dual_rail.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_support/urdf/gp12_dual_rail.xacro)
+  [`src/motoman_gp12_dual_cell_support/config/gp12_dual_cell.yaml`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/config/gp12_dual_cell.yaml)
 - target mesh, scale, and mount transform:
-  [`src/motoman_gp12_support/urdf/gp12_dual_rail_tool.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_support/urdf/gp12_dual_rail_tool.xacro)
+  [`src/cosmica_resources/urdf/itokawa_target.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/cosmica_resources/urdf/itokawa_target.xacro)
+  and
+  [`src/motoman_gp12_dual_cell_support/config/gp12_dual_cell.yaml`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/config/gp12_dual_cell.yaml)
 - robot tool frame definition:
   [`src/motoman_gp12_support/urdf/gp12_macro.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_support/urdf/gp12_macro.xacro)
 
 Important current values in the target scene:
 
-- `target_model_scale` is `0.001`
-- `group_2/tool0_to_target_mount` uses `target_tool0_offset_xyz` and `target_tool0_offset_rpy`
+- `target.mesh_scale_xyz` is `0.001 0.001 0.001`
+- `target.parent_to_mount_xyz` and `target.parent_to_mount_rpy` define `group_2/tool0 -> group_2/target_mount`
 
 ## Current Limitations
 
@@ -114,7 +116,7 @@ Important current values in the target scene:
 
 Use the current setup in two modes:
 
-1. Use `ros2 launch cosmica_resources view_gp12_dual_rail_target.launch.xml` when you want to inspect geometry, frames, and scene layout.
+1. Use `ros2 launch motoman_gp12_dual_cell_support view_gp12_dual_cell.launch.xml cell_mode:=rail attach_target:=true` when you want to inspect geometry, frames, and scene layout.
 2. Use `ros2 launch motoman_gp12_moveit2_config demo.launch.py` only when you want the existing single-robot MoveIt 2 flow.
 
 Do not expect the current single-robot MoveIt package to plan for both robots or the rail.

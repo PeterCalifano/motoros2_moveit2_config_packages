@@ -14,17 +14,17 @@ At the moment, the workspace contains:
 
 ## How The Current GP12 Dual Setup Works
 
-The dual-cell description is split across two packages:
+The dual-cell description is now split across the cell package and the target-assets package:
 
-- [`src/motoman_gp12_support/urdf/gp12_dual_rail.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_support/urdf/gp12_dual_rail.xacro) builds the shared `world` frame, the rail, `rail_joint`, a rail-mounted `group_1` GP12, and a fixed `group_2` GP12.
-- [`src/motoman_gp12_support/urdf/gp12_dual_rail_tool.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_support/urdf/gp12_dual_rail_tool.xacro) extends that scene by attaching the Itokawa target mesh through an explicit `group_2/target_mount` frame.
-- [`src/cosmica_resources/launch/view_gp12_dual_rail_target.launch.xml`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/cosmica_resources/launch/view_gp12_dual_rail_target.launch.xml) launches `robot_state_publisher`, `joint_state_publisher_gui`, and RViz for the combined scene.
+- [`src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro) composes the shared `world` frame, rail or fixed-base topology, dual GP12 robots, and optional target attachment.
+- [`src/motoman_gp12_dual_cell_support/launch/view_gp12_dual_cell.launch.xml`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/launch/view_gp12_dual_cell.launch.xml) launches `robot_state_publisher`, `joint_state_publisher_gui`, and RViz for the combined cell scene.
+- [`src/cosmica_resources/urdf/itokawa_target.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/cosmica_resources/urdf/itokawa_target.xacro) owns the reusable Itokawa target link geometry and simplified collision proxy.
 
 The current transform chain for the target is simple:
 
 - `world -> group_2/base_link -> ... -> group_2/flange -> group_2/tool0 -> group_2/target_mount -> group_2/target`
 - the target mount offset is controlled in the `tool0 -> target_mount` joint
-- the mesh scale is hard-coded to `0.001`
+- the mesh scale and target collision proxy are parameterized through the cell YAML and target macro
 
 ## Current State Review
 
@@ -53,6 +53,47 @@ If you want to grow this into a production workspace, I would separate responsib
 - Store mount transforms, target scale, and rail geometry in YAML or xacro args instead of hard-coded literals.
 - Add a dual MoveIt package, likely named `motoman_gp12_dual_moveit2_config`, with planning groups for `group_1`, `group_2`, and combined motions including the rail when needed.
 - Add lightweight validation checks, at minimum xacro expansion checks and one launch smoke test.
+
+## Current Dual Cell Configuration Source
+
+The dual-cell scene is now parameterized from:
+
+- [`src/motoman_gp12_dual_cell_support/config/gp12_dual_cell.yaml`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/config/gp12_dual_cell.yaml)
+
+That YAML owns the current cell dimensions and placement parameters for:
+
+- rail geometry and rail joint limits
+- world-to-rail transform
+- `group_1` fixed-base transform for fixed mode
+- `group_2` fixed-base transform
+- target mount transform
+- target mesh scale and material parameters
+
+The top-level cell xacro that consumes this file is:
+
+- [`src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro)
+
+The dual-cell launch entrypoint is:
+
+- [`src/motoman_gp12_dual_cell_support/launch/view_gp12_dual_cell.launch.xml`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/launch/view_gp12_dual_cell.launch.xml)
+
+It accepts:
+
+- `cell_mode:=rail|fixed`
+- `attach_target:=true|false`
+
+## Canonical Target Transform Chain
+
+In rail mode, the mounted target chain is:
+
+- `world -> group_2/base_link -> ... -> group_2/flange -> group_2/tool0 -> group_2/target_mount -> group_2/target`
+
+In fixed mode, the target chain is the same from `group_2/base_link` downward.
+
+`group_1` changes by mode:
+
+- rail mode: `world -> rail -> group_1/base_link`
+- fixed mode: `world -> group_1/base_link`
 
 ## Suggested Next Technical Milestone
 
