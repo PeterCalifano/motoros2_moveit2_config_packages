@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <robot name="motoman_gp12_dual">
+    <!-- JOINT GROUPS: Define planning groups for motion planning -->
+
+    <!-- First manipulator group (6 DOF arm) -->
     <group name="group_1_manipulator">
         <joint name="group_1/joint_1"/>
         <joint name="group_1/joint_2"/>
@@ -9,6 +12,7 @@
         <joint name="group_1/joint_6"/>
     </group>
 
+    <!-- First manipulator with linear rail (7 DOF total) -->
     <group name="group_1_with_rail">
         <joint name="rail_joint"/>
         <joint name="group_1/joint_1"/>
@@ -19,6 +23,7 @@
         <joint name="group_1/joint_6"/>
     </group>
 
+    <!-- Second manipulator group (6 DOF arm) -->
     <group name="group_2_manipulator">
         <joint name="group_2/joint_1"/>
         <joint name="group_2/joint_2"/>
@@ -28,16 +33,20 @@
         <joint name="group_2/joint_6"/>
     </group>
 
+    <!-- Both manipulators without rail (12 DOF total) -->
     <group name="dual_manipulators">
         <group name="group_1_manipulator"/>
         <group name="group_2_manipulator"/>
     </group>
 
+    <!-- Both manipulators with rail for first arm (13 DOF total) -->
     <group name="dual_cell">
         <group name="group_1_with_rail"/>
         <group name="group_2_manipulator"/>
     </group>
 
+    <!-- Group state definitions - home positions -->
+    <!-- Home state for first manipulator -->
     <group_state name="home" group="group_1_manipulator">
         <joint name="group_1/joint_1" value="0"/>
         <joint name="group_1/joint_2" value="0"/>
@@ -97,6 +106,7 @@
         <joint name="group_2/joint_6" value="0"/>
     </group_state>
 
+    <!-- Collision disable definitions for adjacent links and impossible collisions -->
     <disable_collisions link1="rail" link2="group_1/base_link" reason="Adjacent"/>
 
     <disable_collisions link1="group_1/base_link" link2="group_1/link_1" reason="Adjacent"/>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <robot name="motoman_gp12_dual">
+
+    <!-- JOINT GROUPS: Define planning groups for motion planning -->
+    
+    <!-- Group 1 Manipulator: 6-DOF arm (Group 1) -->
     <group name="group_1_manipulator">
         <joint name="group_1/joint_1"/>
         <joint name="group_1/joint_2"/>
@@ -9,6 +13,7 @@
         <joint name="group_1/joint_6"/>
     </group>
 
+    <!-- Group 2 Manipulator: 6-DOF arm (Group 2) -->
     <group name="group_2_manipulator">
         <joint name="group_2/joint_1"/>
         <joint name="group_2/joint_2"/>
@@ -18,11 +23,13 @@
         <joint name="group_2/joint_6"/>
     </group>
 
+    <!-- Dual Manipulators: Combined group for coordinated dual-arm planning -->
     <group name="dual_manipulators">
         <group name="group_1_manipulator"/>
         <group name="group_2_manipulator"/>
     </group>
-
+    
+    <!-- Home pose for Group 1: All joints at 0 degrees -->
     <group_state name="home" group="group_1_manipulator">
         <joint name="group_1/joint_1" value="0"/>
         <joint name="group_1/joint_2" value="0"/>
@@ -32,6 +39,7 @@
         <joint name="group_1/joint_6" value="0"/>
     </group_state>
 
+    <!-- Home pose for Group 2: All joints at 0 degrees -->
     <group_state name="home" group="group_2_manipulator">
         <joint name="group_2/joint_1" value="0"/>
         <joint name="group_2/joint_2" value="0"/>
@@ -41,6 +49,7 @@
         <joint name="group_2/joint_6" value="0"/>
     </group_state>
 
+    <!-- Home pose for Dual Manipulators: Both arms at 0 degrees -->
     <group_state name="home" group="dual_manipulators">
         <joint name="group_1/joint_1" value="0"/>
         <joint name="group_1/joint_2" value="0"/>
@@ -55,7 +64,8 @@
         <joint name="group_2/joint_5" value="0"/>
         <joint name="group_2/joint_6" value="0"/>
     </group_state>
-
+    
+    <!-- Group 1 internal collisions: Disable self-collisions within the arm -->
     <disable_collisions link1="group_1/base_link" link2="group_1/link_1" reason="Adjacent"/>
     <disable_collisions link1="group_1/link_1" link2="group_1/link_2" reason="Adjacent"/>
     <disable_collisions link1="group_1/link_1" link2="group_1/link_3" reason="Never"/>
@@ -69,6 +79,7 @@
     <disable_collisions link1="group_1/link_4" link2="group_1/link_5" reason="Adjacent"/>
     <disable_collisions link1="group_1/link_5" link2="group_1/link_6" reason="Adjacent"/>
 
+    <!-- Group 2 internal collisions: Disable self-collisions within the arm -->
     <disable_collisions link1="group_2/base_link" link2="group_2/link_1" reason="Adjacent"/>
     <disable_collisions link1="group_2/link_1" link2="group_2/link_2" reason="Adjacent"/>
     <disable_collisions link1="group_2/link_1" link2="group_2/link_3" reason="Never"/>
