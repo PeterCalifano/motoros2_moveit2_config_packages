@@ -26,6 +26,7 @@
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>warehouse_ros_sqlite</exec_depend>
   <exec_depend>xacro</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
   <exec_depend>motoman_gp12_dual_cell_support</exec_depend>
   <exec_depend>moveit_configs_utils</exec_depend>
   <exec_depend>moveit_ros_visualization</exec_depend>
