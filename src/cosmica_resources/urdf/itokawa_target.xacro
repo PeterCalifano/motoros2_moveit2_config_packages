@@ -1,13 +1,83 @@
 <?xml version="1.0" ?>
-<!-- gripper_macro.xacro -->
-<xacro:macro name="gripper" params="prefix parent">
-<link name="${prefix}gripper">
-    <visual>...</visual>
-    <collision>...</collision>
-</link>
-<joint name="${prefix}tool0-gripper" type="fixed">
-    <parent link="${parent}"/>
-    <child link="${prefix}gripper"/>
-    <origin xyz="0 0 0.1" rpy="0 0 0"/>
-</joint>
-</xacro:macro>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="itokawa_target" params="
+      link_name
+      mesh_scale_xyz:='0.001 0.001 0.001'
+      material_rgba:='0.5 0.5 0.5 1.0'
+      mesh_origin_xyz:='0 0 0'
+      mesh_origin_rpy:='0 0 0'
+      collision_margin_scale:='1.05'">
+    <!--
+      Simplified collision box derived from the Itokawa STL axis-aligned bounds.
+      Raw STL extents:
+        x: 803.5884509086609
+        y: 436.65048837661743
+        z: 374.6582889556885
+      Raw STL center:
+        x: 405.6076910495758
+        y: 220.36149287223816
+        z: 203.567156791687
+      The collision box follows the STL axis alignment and scales with mesh_scale_xyz.
+    -->
+    <xacro:property name="mesh_scale_tokens" value="${xacro.tokenize(mesh_scale_xyz)}"/>
+    <xacro:property name="mesh_origin_tokens" value="${xacro.tokenize(mesh_origin_xyz)}"/>
+
+    <xacro:property name="scale_x" value="${float(mesh_scale_tokens[0])}"/>
+    <xacro:property name="scale_y" value="${float(mesh_scale_tokens[1])}"/>
+    <xacro:property name="scale_z" value="${float(mesh_scale_tokens[2])}"/>
+    <xacro:property name="margin_scale" value="${float(collision_margin_scale)}"/>
+
+    <xacro:property name="origin_x" value="${float(mesh_origin_tokens[0])}"/>
+    <xacro:property name="origin_y" value="${float(mesh_origin_tokens[1])}"/>
+    <xacro:property name="origin_z" value="${float(mesh_origin_tokens[2])}"/>
+
+    <xacro:property name="stl_size_x" value="803.5884509086609"/>
+    <xacro:property name="stl_size_y" value="436.65048837661743"/>
+    <xacro:property name="stl_size_z" value="374.6582889556885"/>
+
+    <xacro:property name="stl_center_x" value="405.6076910495758"/>
+    <xacro:property name="stl_center_y" value="220.36149287223816"/>
+    <xacro:property name="stl_center_z" value="203.567156791687"/>
+
+    <xacro:property name="collision_size_x" value="${stl_size_x * scale_x * margin_scale}"/>
+    <xacro:property name="collision_size_y" value="${stl_size_y * scale_y * margin_scale}"/>
+    <xacro:property name="collision_size_z" value="${stl_size_z * scale_z * margin_scale}"/>
+
+    <link name="${link_name}">
+      <visual>
+        <geometry>
+          <mesh filename="package://cosmica_resources/meshes/Itokawa_mockup_assembly.stl" scale="${mesh_scale_xyz}"/>
+        </geometry>
+        <origin xyz="${mesh_origin_xyz}" rpy="${mesh_origin_rpy}"/>
+        <material name="${link_name}_material">
+          <color rgba="${material_rgba}"/>
+        </material>
+      </visual>
+      <!-- Full mesh geometry for collision checks (higher fidelity, lower performance) -->
+      <!-- <collision>
+        <geometry>
+          <mesh filename="package://cosmica_resources/meshes/Itokawa_mockup_assembly.stl" scale="${mesh_scale_xyz}"/>
+        </geometry>
+        <origin xyz="${mesh_origin_xyz}" rpy="${mesh_origin_rpy}"/>
+      </collision> -->
+
+      <!-- Simplified collision geometry for better performance -->
+      <collision>
+        <geometry>
+          <box size="${collision_size_x} ${collision_size_y} ${collision_size_z}"/>
+        </geometry>
+        <origin
+          xyz="${origin_x + stl_center_x * scale_x} ${origin_y + stl_center_y * scale_y} ${origin_z + stl_center_z * scale_z}"
+          rpy="${mesh_origin_rpy}"/>
+      </collision>
+
+      <!-- Inertial properties todo next -->
+      <!--
+      <inertial>
+        <mass value="10"/>
+        <inertia ixx="1e-3" ixy="0.0" ixz="0.0" iyy="1e-3" iyz="0.0" izz="1e-3"/>
+      </inertial>
+      -->
+    </link>
+  </xacro:macro>
+</robot>

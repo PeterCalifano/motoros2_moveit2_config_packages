@@ -1,0 +1,51 @@
+scene:
+  world_frame: "world"
+
+group_1:
+  prefix: "group_1/"
+  base_link: "group_1/base_link"
+  tool0: "group_1/tool0"
+  fixed_base_joint: "world_to_robot1"
+  fixed_base_xyz: "4.0 0.0 0.0"
+  fixed_base_rpy: "0.0 0.0 3.14159"
+
+group_2:
+  prefix: "group_2/"
+  base_link: "group_2/base_link"
+  tool0: "group_2/tool0"
+  fixed_base_joint: "world_to_robot2"
+  fixed_base_xyz: "0.0 0.0 0.0"
+  fixed_base_rpy: "0.0 0.0 0.0"
+
+rail:
+  link_name: "rail"
+  world_joint_name: "world_to_rail"
+  rail_joint_name: "rail_joint"
+  size_xyz: "4.0 0.5 0.25"
+  geometry_origin_xyz: "0.0 0.0 0.125"
+  geometry_origin_rpy: "0.0 0.0 0.0"
+  material_rgba: "0.5 0.5 0.5 0.5"
+  world_to_rail_xyz: "4.5 0.0 0.0"
+  world_to_rail_rpy: "0.0 0.0 3.14159"
+  rail_to_robot_xyz: "0.0 0.0 0.25"
+  rail_to_robot_rpy: "0.0 0.0 0.0"
+  axis_xyz: "1.0 0.0 0.0"
+  lower: -2.0
+  upper: 2.0
+  effort: 1000.0
+  velocity: 1.0
+
+target:
+  mesh_link_name: "group_2/target"
+  mount_link_name: "group_2/target_mount"
+  parent_link: "group_2/tool0"
+  parent_to_mount_joint_name: "group_2/tool0_to_target_mount"
+  mount_to_target_joint_name: "group_2/target_mount_to_target"
+  parent_to_mount_xyz: "0.0 0.0 0.0"
+  parent_to_mount_rpy: "0.0 0.0 0.0"
+  mount_to_target_xyz: "0.0 0.0 0.0"
+  mount_to_target_rpy: "0.0 0.0 0.0"
+  mesh_scale_xyz: "0.001 0.001 0.001"
+  material_rgba: "0.5 0.5 0.5 1.0"
+  mesh_origin_xyz: "0.0 0.0 0.0"
+  mesh_origin_rpy: "0.0 0.0 0.0"

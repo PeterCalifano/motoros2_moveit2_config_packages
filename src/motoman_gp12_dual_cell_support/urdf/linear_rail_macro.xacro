@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="linear_rail" params="
+      world_link
+      rail_link
+      child_link
+      world_to_rail_joint_name
+      rail_joint_name
+      size_xyz
+      geometry_origin_xyz:='0 0 0'
+      geometry_origin_rpy:='0 0 0'
+      world_to_rail_xyz:='0 0 0'
+      world_to_rail_rpy:='0 0 0'
+      rail_to_child_xyz:='0 0 0'
+      rail_to_child_rpy:='0 0 0'
+      axis_xyz:='1 0 0'
+      lower:='0.0'
+      upper:='0.0'
+      effort:='0.0'
+      velocity:='0.0'
+      material_rgba:='0.5 0.5 0.5 0.5'">
+    <link name="${rail_link}">
+      <visual>
+        <geometry>
+          <box size="${size_xyz}"/>
+        </geometry>
+        <origin xyz="${geometry_origin_xyz}" rpy="${geometry_origin_rpy}"/>
+        <material name="${rail_link}_material">
+          <color rgba="${material_rgba}"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${size_xyz}"/>
+        </geometry>
+        <origin xyz="${geometry_origin_xyz}" rpy="${geometry_origin_rpy}"/>
+      </collision>
+    </link>
+
+    <joint name="${world_to_rail_joint_name}" type="fixed">
+      <parent link="${world_link}"/>
+      <child link="${rail_link}"/>
+      <origin xyz="${world_to_rail_xyz}" rpy="${world_to_rail_rpy}"/>
+    </joint>
+
+    <joint name="${rail_joint_name}" type="prismatic">
+      <parent link="${rail_link}"/>
+      <child link="${child_link}"/>
+      <origin xyz="${rail_to_child_xyz}" rpy="${rail_to_child_rpy}"/>
+      <axis xyz="${axis_xyz}"/>
+      <limit lower="${lower}" upper="${upper}" effort="${effort}" velocity="${velocity}"/>
+    </joint>
+  </xacro:macro>
+</robot>

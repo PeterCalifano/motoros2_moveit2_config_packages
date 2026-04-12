@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="fixed_mount_frame" params="
+      mount_link_name
+      parent_link
+      child_link
+      parent_to_mount_joint_name
+      mount_to_child_joint_name
+      parent_to_mount_xyz:='0 0 0'
+      parent_to_mount_rpy:='0 0 0'
+      mount_to_child_xyz:='0 0 0'
+      mount_to_child_rpy:='0 0 0'">
+    <link name="${mount_link_name}"/>
+
+    <joint name="${parent_to_mount_joint_name}" type="fixed">
+      <parent link="${parent_link}"/>
+      <child link="${mount_link_name}"/>
+      <origin xyz="${parent_to_mount_xyz}" rpy="${parent_to_mount_rpy}"/>
+    </joint>
+
+    <joint name="${mount_to_child_joint_name}" type="fixed">
+      <parent link="${mount_link_name}"/>
+      <child link="${child_link}"/>
+      <origin xyz="${mount_to_child_xyz}" rpy="${mount_to_child_rpy}"/>
+    </joint>
+  </xacro:macro>
+</robot>

@@ -1,10 +1,12 @@
 <?xml version="1.0" ?>
-<robot name="dual_gp12_rail" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="gp12_dual_cell" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:arg name="config_file" default="$(find motoman_gp12_dual_cell_support)/config/gp12_dual_cell.yaml" />
+  <xacro:arg name="cell_mode" default="rail" />
+  <xacro:arg name="attach_target" default="true" />
 
   <xacro:include filename="$(find motoman_gp12_dual_cell_support)/urdf/gp12_dual_cell_macro.xacro" />
   <xacro:gp12_dual_cell
     config_file="$(arg config_file)"
-    cell_mode="rail"
-    attach_target="false" />
+    cell_mode="$(arg cell_mode)"
+    attach_target="$(arg attach_target)" />
 </robot>

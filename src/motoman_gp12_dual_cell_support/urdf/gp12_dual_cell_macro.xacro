@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find motoman_gp12_support)/urdf/gp12_macro.xacro" />
+  <xacro:include filename="$(find motoman_gp12_dual_cell_support)/urdf/linear_rail_macro.xacro" />
+  <xacro:include filename="$(find motoman_gp12_dual_cell_support)/urdf/fixed_mount_macro.xacro" />
+  <xacro:include filename="$(find cosmica_resources)/urdf/itokawa_target.xacro" />
+
+  <xacro:macro name="gp12_dual_cell" params="
+      config_file:='$(find motoman_gp12_dual_cell_support)/config/gp12_dual_cell.yaml'
+      cell_mode:='rail'
+      attach_target:='true'">
+    <xacro:property name="cfg" value="${xacro.load_yaml(config_file)}"/>
+
+    <xacro:unless value="${cell_mode == 'rail' or cell_mode == 'fixed'}">
+      <xacro:error message="${'Unsupported cell_mode: ' + cell_mode + '. Expected rail or fixed.'}"/>
+    </xacro:unless>
+
+    <link name="${cfg.scene.world_frame}"/>
+
+    <xacro:motoman_gp12 prefix="${cfg.group_1.prefix}"/>
+    <xacro:motoman_gp12 prefix="${cfg.group_2.prefix}"/>
+
+    <xacro:if value="${cell_mode == 'rail'}">
+      <xacro:linear_rail
+        world_link="${cfg.scene.world_frame}"
+        rail_link="${cfg.rail.link_name}"
+        child_link="${cfg.group_1.base_link}"
+        world_to_rail_joint_name="${cfg.rail.world_joint_name}"
+        rail_joint_name="${cfg.rail.rail_joint_name}"
+        size_xyz="${cfg.rail.size_xyz}"
+        geometry_origin_xyz="${cfg.rail.geometry_origin_xyz}"
+        geometry_origin_rpy="${cfg.rail.geometry_origin_rpy}"
+        world_to_rail_xyz="${cfg.rail.world_to_rail_xyz}"
+        world_to_rail_rpy="${cfg.rail.world_to_rail_rpy}"
+        rail_to_child_xyz="${cfg.rail.rail_to_robot_xyz}"
+        rail_to_child_rpy="${cfg.rail.rail_to_robot_rpy}"
+        axis_xyz="${cfg.rail.axis_xyz}"
+        lower="${cfg.rail.lower}"
+        upper="${cfg.rail.upper}"
+        effort="${cfg.rail.effort}"
+        velocity="${cfg.rail.velocity}"
+        material_rgba="${cfg.rail.material_rgba}"/>
+    </xacro:if>
+
+    <xacro:if value="${cell_mode == 'fixed'}">
+      <joint name="${cfg.group_1.fixed_base_joint}" type="fixed">
+        <parent link="${cfg.scene.world_frame}"/>
+        <child link="${cfg.group_1.base_link}"/>
+        <origin xyz="${cfg.group_1.fixed_base_xyz}" rpy="${cfg.group_1.fixed_base_rpy}"/>
+      </joint>
+    </xacro:if>
+
+    <joint name="${cfg.group_2.fixed_base_joint}" type="fixed">
+      <parent link="${cfg.scene.world_frame}"/>
+      <child link="${cfg.group_2.base_link}"/>
+      <origin xyz="${cfg.group_2.fixed_base_xyz}" rpy="${cfg.group_2.fixed_base_rpy}"/>
+    </joint>
+
+    <xacro:if value="${str(attach_target).lower() == 'true'}">
+      <xacro:itokawa_target
+        link_name="${cfg.target.mesh_link_name}"
+        mesh_scale_xyz="${cfg.target.mesh_scale_xyz}"
+        material_rgba="${cfg.target.material_rgba}"
+        mesh_origin_xyz="${cfg.target.mesh_origin_xyz}"
+        mesh_origin_rpy="${cfg.target.mesh_origin_rpy}"/>
+
+      <xacro:fixed_mount_frame
+        mount_link_name="${cfg.target.mount_link_name}"
+        parent_link="${cfg.target.parent_link}"
+        child_link="${cfg.target.mesh_link_name}"
+        parent_to_mount_joint_name="${cfg.target.parent_to_mount_joint_name}"
+        mount_to_child_joint_name="${cfg.target.mount_to_target_joint_name}"
+        parent_to_mount_xyz="${cfg.target.parent_to_mount_xyz}"
+        parent_to_mount_rpy="${cfg.target.parent_to_mount_rpy}"
+        mount_to_child_xyz="${cfg.target.mount_to_target_xyz}"
+        mount_to_child_rpy="${cfg.target.mount_to_target_rpy}"/>
+    </xacro:if>
+  </xacro:macro>
+</robot>
