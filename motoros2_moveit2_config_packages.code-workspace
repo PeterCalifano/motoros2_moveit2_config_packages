@@ -20,6 +20,9 @@
 		},
 		{
 			"path": "../ws_moveit"
+		},
+		{
+			"path": "../../dev-tools/study_notes_archive"
 		}
 	],
 	"settings": {
