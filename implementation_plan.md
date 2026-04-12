@@ -10,22 +10,36 @@
 
 ## Phase 1: Freeze The Current Baseline
 
-- [ ] Confirm the current single-robot GP12 MoveIt flow still launches from `motoman_gp12_moveit2_config`.
-- [ ] Confirm the current dual-scene RViz visualization still launches from the existing dual-scene xacro.
-- [ ] Treat current files under `motoman_gp12_support/urdf/gp12_dual_rail*.xacro` as the behavior baseline for the new cell package.
-- [ ] Decide the final package name for the cell description package.
-- [ ] Decide the external configuration interface for cell topology selection, for example `cell_mode:=rail|fixed` or `with_rail:=true|false`.
-- [ ] Decide whether generated `.urdf` files will continue to be committed or regenerated only when needed.
+- [x] Confirm the current single-robot GP12 MoveIt flow still launches from `motoman_gp12_moveit2_config`.
+- [x] Confirm the current dual-scene RViz visualization still launches from the existing dual-scene xacro.
+- [x] Treat current files under `motoman_gp12_support/urdf/gp12_dual_rail*.xacro` as the behavior baseline for the new cell package.
+- [x] Decide the final package name for the cell description package.
+- [x] Decide the external configuration interface for cell topology selection, for example `cell_mode:=rail|fixed` or `with_rail:=true|false`.
+- [x] Decide whether generated `.urdf` files will continue to be committed or regenerated only when needed.
+
+### Phase 1 Outcomes
+
+- [x] Validate the current single-robot GP12 entrypoint by resolving `motoman_gp12_moveit2_config/demo.launch.py` and expanding `motoman_gp12_moveit2_config/config/motoman_gp12.urdf.xacro`.
+- [x] Validate the current dual-scene entrypoint by resolving `cosmica_resources/view_gp12_dual_rail_target.launch.xml` and expanding `motoman_gp12_support/urdf/gp12_dual_rail_tool.xacro`.
+- [x] Use `motoman_gp12_dual_cell_support` as the new cell-description package name.
+- [x] Use `cell_mode:=rail|fixed` as the external topology-selection interface.
+- [x] Keep generated `.urdf` files committed for consistency with current repository conventions, but treat xacro as the source of truth and avoid manual edits to generated URDF artifacts.
 
 ## Phase 2: Create A Dedicated Cell Description Package
 
-- [ ] Create a new package for facility-specific scene composition, for example `motoman_gp12_dual_cell_support`.
-- [ ] Add `CMakeLists.txt` install rules for `launch`, `urdf`, and any `config` directories in the new package.
-- [ ] Add `package.xml` dependencies on `motoman_gp12_support`, `cosmica_resources`, `motoman_resources`, `xacro`, `robot_state_publisher`, `joint_state_publisher_gui`, and `rviz2`.
+- [x] Create a new package for facility-specific scene composition, for example `motoman_gp12_dual_cell_support`.
+- [x] Add `CMakeLists.txt` install rules for `launch`, `urdf`, and any `config` directories in the new package.
+- [x] Add `package.xml` dependencies on `motoman_gp12_support`, `cosmica_resources`, `motoman_resources`, `xacro`, `robot_state_publisher`, `joint_state_publisher_gui`, and `rviz2`.
 - [ ] Move the dual-scene launch currently in `cosmica_resources/launch/view_gp12_dual_rail_target.launch.xml` into the new cell package.
 - [ ] Move the top-level dual-scene xacro composition out of `motoman_gp12_support` and into the new cell package.
 - [ ] Leave `cosmica_resources` responsible for target meshes and target-only reusable description assets, not full robot-cell launches.
 - [ ] Leave `motoman_gp12_support` responsible for the GP12 robot macro and GP12-only viewer launches, not facility-specific cell assembly.
+
+### Phase 2 Interim Status
+
+- [x] Seed the new package with baseline dual-scene launch and xacro files so the new package can build and resolve in isolation.
+- [x] Build `motoman_gp12_dual_cell_support` successfully with `colcon build --packages-select motoman_gp12_dual_cell_support`.
+- [x] Validate the new package launch entrypoint resolves with `ros2 launch motoman_gp12_dual_cell_support view_gp12_dual_rail_target.launch.xml --show-args`.
 
 ## Phase 3: Extract Reusable Scene Macros
 
