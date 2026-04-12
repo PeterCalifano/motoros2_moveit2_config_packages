@@ -31,15 +31,14 @@ The current transform chain for the target is simple:
 The repository is already useful for two things:
 
 - single-robot MoveIt 2 visualization and planning for GP12 and HC10
-- RViz-only visualization of a dual GP12 scene with a rail and attached target
+- dual GP12 visualization and dual-stack MoveIt configuration for rail and fixed-base modes
 
 The main gaps between the current state and a production-ready dual-robot stack are:
 
-- there is no dedicated dual GP12 MoveIt 2 config package yet
-- the rail joint exists in the URDF, but it is not modeled in any SRDF, controller config, or kinematics setup
-- the target mount is now explicit, but it is still embedded directly in the dual-scene xacro instead of being a reusable mount macro or cell-level description
-- GP12-specific scene launches currently live in `cosmica_resources`, which is otherwise a generic target-assets package
-- the local helper script `display_dual_gp12_target_rail.sh` currently launches the single-robot GP12 MoveIt demo instead of the dual target scene
+- live joint-state integration is still not defined for the dual stack
+- the production action-server endpoints for the two GP12s and the rail still need to be matched to the deployed MotoROS2 topology
+- automated self-collision matrix generation still needs to be rerun in an environment with the MoveIt Setup Assistant
+- the local helper script `display_dual_gp12_target_rail.sh` still launches a compatibility viewer launch and should be renamed or folded into a `scripts/` layout
 
 ## Recommended Production Structure
 
@@ -99,11 +98,11 @@ In fixed mode, the target chain is the same from `group_2/base_link` downward.
 
 Before building ROS 2 interfaces that feed MoveIt 2, the cleanest next step is:
 
-1. Freeze the scene description for the dual cell.
-2. Introduce a dedicated dual MoveIt package.
-3. Decide the canonical joint list for visualization:
+1. Freeze the controller endpoint naming for the deployed MotoROS2 graph.
+2. Decide the canonical joint list for live visualization:
    `rail_joint`, `group_1/joint_1..6`, `group_2/joint_1..6`.
-4. Build an interface node that converts your upstream data into `sensor_msgs/msg/JointState`.
+3. Build an interface node that converts your upstream data into `sensor_msgs/msg/JointState`.
+4. Validate the dual MoveIt launch against the real action-server endpoints.
 
 That path will let RViz and MoveIt share the same robot description instead of maintaining separate visualization logic.
 

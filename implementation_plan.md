@@ -105,10 +105,10 @@
 - [x] Add kinematics entries for both arm planning groups in `kinematics.yaml`.
 - [x] Add rail-aware kinematics strategy if a rail-inclusive group is expected to plan through MoveIt.
 - [x] Extend `joint_limits.yaml` to include `rail_joint`, `group_1/joint_1..6`, and `group_2/joint_1..6`.
-- [ ] Define the controller strategy for the dual stack.
-- [ ] Decide whether the production controller model is one action server per robot, a combined controller abstraction, or visualization-only stubs during early integration.
+- [x] Define the controller strategy for the dual stack.
+- [x] Decide whether the production controller model is one action server per robot, a combined controller abstraction, or visualization-only stubs during early integration.
 - [x] Provide mode-specific controller and joint-limit config where the rail-enabled and fixed-base joint lists differ.
-- [ ] Ensure action namespaces match the MotoROS2 deployment model instead of relying on single-robot defaults.
+- [x] Ensure action namespaces match the MotoROS2 deployment model instead of relying on single-robot defaults.
 
 ## Phase 9: Update Launch Files
 

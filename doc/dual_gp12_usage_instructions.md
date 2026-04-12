@@ -8,8 +8,6 @@ This guide documents how to use the current dual GP12 configuration in this work
 - a shared rail for `group_1`
 - an Itokawa target mesh mounted on `group_2`
 
-Today, this setup is a scene-visualization flow, not a full dual-robot MoveIt 2 stack.
-
 ## Files That Define The Scene
 
 - [`src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_cell_support/urdf/gp12_dual_cell.xacro): top-level dual GP12 cell with `rail|fixed` topology selection and optional target attachment.
@@ -106,27 +104,30 @@ Important current values in the target scene:
 
 ## Current Limitations
 
-- There is no dual GP12 MoveIt 2 configuration package yet.
-- The existing GP12 MoveIt package is single-robot only:
+- The dual MoveIt package exists at
+  [`src/motoman_gp12_dual_moveit2_config`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_dual_moveit2_config),
+  but the real controller endpoints and joint-state sources still need to match your MotoROS2 deployment.
+- The existing GP12 MoveIt package remains single-robot only:
   [`src/motoman_gp12_moveit2_config`](/home/peterc/devDir/ws_ros/motoros2_moveit2_config_packages/src/motoman_gp12_moveit2_config)
-- `display_dual_gp12_target_rail.sh` in the current working tree does not launch the dual target scene; it launches the single GP12 MoveIt demo instead.
-- The target mount now has its own frame, but it still lives inline in the scene xacro rather than in a reusable tooling macro.
+- `display_dual_gp12_target_rail.sh` still points at a compatibility viewer launch and should be renamed or simplified.
+- The dual package defaults to one external `FollowJointTrajectory` action server per GP12, plus an optional separate rail action server in rail mode.
 
 ## Recommended Usage Pattern Right Now
 
 Use the current setup in two modes:
 
 1. Use `ros2 launch motoman_gp12_dual_cell_support view_gp12_dual_cell.launch.xml cell_mode:=rail attach_target:=true` when you want to inspect geometry, frames, and scene layout.
-2. Use `ros2 launch motoman_gp12_moveit2_config demo.launch.py` only when you want the existing single-robot MoveIt 2 flow.
+2. Use `ros2 launch motoman_gp12_dual_moveit2_config demo.launch.py cell_mode:=rail` when you want the dual-stack MoveIt 2 flow.
+3. Use `ros2 launch motoman_gp12_moveit2_config demo.launch.py` only when you want the existing single-robot MoveIt 2 flow.
 
-Do not expect the current single-robot MoveIt package to plan for both robots or the rail.
+Do not expect the dual MoveIt package to execute trajectories correctly until its controller names, action namespace, and joint-state source match the deployed MotoROS2 system.
 
 ## Best Next Step
 
-The clean next development step is to create a dedicated dual-robot MoveIt package and feed it joint data for:
+The clean next development step is to feed the dual package with joint data for:
 
 - `rail_joint`
 - `group_1/joint_1..6`
 - `group_2/joint_1..6`
 
-That will let you drive visualization from live or simulated interface data without depending on the joint-state GUI.
+That will let you drive visualization and planning from live or simulated interface data without depending on the joint-state GUI.
