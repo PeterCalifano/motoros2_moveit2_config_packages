@@ -1,0 +1,9 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: motoman_gp12_dual_moveit2_config
+    relative_path: config/motoman_gp12_dual.urdf.xacro
+  srdf:
+    relative_path: config/motoman_gp12_dual_rail.srdf
+  package_settings:
+    author_name: Pietro Califano
+    author_email: pietro.califano@polimi.it

@@ -5,5 +5,5 @@ project(motoman_gp12_dual_cell_support)
 find_package(ament_cmake REQUIRED)
 ament_package()
 
-install(DIRECTORY launch urdf
+install(DIRECTORY config launch urdf
   DESTINATION share/${PROJECT_NAME})
