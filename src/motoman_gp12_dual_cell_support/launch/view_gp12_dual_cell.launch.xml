@@ -1,4 +1,6 @@
 <launch>
+  <arg name="cell_mode" default="rail" description="Cell topology: rail or fixed" />
+  <arg name="attach_target" default="true" description="Attach the target mesh to group_2" />
   <let name="xacro_path" value="$(find-pkg-share motoman_gp12_dual_cell_support)/urdf/gp12_dual_cell.xacro" />
   <let name="config_file" value="$(find-pkg-share motoman_gp12_dual_cell_support)/config/gp12_dual_cell.yaml" />
   <let name="rviz_cfg" value="$(find-pkg-share motoman_resources)/rviz/view_dual_robot.rviz" />
@@ -7,7 +9,7 @@
     <param
       name="robot_description"
       type="str"
-      value="$(command 'xacro $(var xacro_path) cell_mode:=rail attach_target:=true config_file:=$(var config_file)')" />
+      value="$(command 'xacro $(var xacro_path) cell_mode:=$(var cell_mode) attach_target:=$(var attach_target) config_file:=$(var config_file)')" />
   </node>
   <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" />
   <node pkg="rviz2" exec="rviz2" output="screen" args="-d $(var rviz_cfg)" />
