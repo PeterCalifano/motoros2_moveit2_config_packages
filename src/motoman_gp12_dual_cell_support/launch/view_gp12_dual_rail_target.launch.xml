@@ -9,6 +9,11 @@
       type="str"
       value="$(command 'xacro $(var xacro_path) cell_mode:=rail attach_target:=true config_file:=$(var config_file)')" />
   </node>
-  <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" />
+  <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui">
+    <param
+      name="robot_description"
+      type="str"
+      value="$(command 'xacro $(var xacro_path) cell_mode:=rail attach_target:=true config_file:=$(var config_file)')" />
+  </node>
   <node pkg="rviz2" exec="rviz2" output="screen" args="-d $(var rviz_cfg)" />
 </launch>
