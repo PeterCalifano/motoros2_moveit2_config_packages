@@ -6,7 +6,7 @@ group_1:
   base_link: "group_1/base_link"
   tool0: "group_1/tool0"
   fixed_base_joint: "world_to_robot1"
-  fixed_base_xyz: "4.0 0.0 0.0"
+  fixed_base_xyz: "2.2 0.0 0.0"
   fixed_base_rpy: "0.0 0.0 3.14159"
 
 group_2:
@@ -47,5 +47,6 @@ target:
   mount_to_target_rpy: "0.0 0.0 0.0"
   mesh_scale_xyz: "0.001 0.001 0.001"
   material_rgba: "0.5 0.5 0.5 1.0"
-  mesh_origin_xyz: "0.0 0.0 0.0"
+  # Align the visual mesh to the estimated center of the small circular mounting hole. This anchor is fitted from the lowest-Y circular feature in the STL.
+  mesh_origin_xyz: "-0.289 -0.004 -0.190"
   mesh_origin_rpy: "0.0 0.0 0.0"
