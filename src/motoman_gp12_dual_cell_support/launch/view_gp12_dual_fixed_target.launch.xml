@@ -1,0 +1,19 @@
+<launch>
+  <let name="xacro_path" value="$(find-pkg-share motoman_gp12_dual_cell_support)/urdf/gp12_dual_cell.xacro" />
+  <let name="config_file" value="$(find-pkg-share motoman_gp12_dual_cell_support)/config/gp12_dual_cell.yaml" />
+  <let name="rviz_cfg" value="$(find-pkg-share motoman_resources)/rviz/view_dual_robot.rviz" />
+
+  <node pkg="robot_state_publisher" exec="robot_state_publisher">
+    <param
+      name="robot_description"
+      type="str"
+      value="$(command 'xacro $(var xacro_path) cell_mode:=fixed attach_target:=true config_file:=$(var config_file)')" />
+  </node>
+  <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui">
+    <param
+      name="robot_description"
+      type="str"
+      value="$(command 'xacro $(var xacro_path) cell_mode:=fixed attach_target:=true config_file:=$(var config_file)')" />
+  </node>
+  <node pkg="rviz2" exec="rviz2" output="screen" args="-d $(var rviz_cfg)" />
+</launch>
